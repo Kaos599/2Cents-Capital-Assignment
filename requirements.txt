@@ -1,0 +1,47 @@
+# Core LangChain and LangGraph
+langchain==0.3.13
+langchain-core==0.3.22
+langchain-community==0.3.13
+langgraph==0.2.56
+langchain-google-genai==2.0.8
+
+# Streamlit and UI
+streamlit==1.43.0
+streamlit-extras==0.5.0
+streamlit-chat==0.1.2
+plotly==5.24.1
+altair==5.5.0
+
+# Financial APIs and Data
+yfinance==0.2.48
+tavily-python==0.6.0
+requests==2.32.3
+pandas==2.2.3
+numpy==1.26.4
+
+# Memory and State Management
+sqlite3
+pickle-mixin==1.0.2
+
+# Testing
+pytest==8.3.4
+pytest-asyncio==0.24.0
+pytest-cov==6.0.0
+
+# Environment and Configuration
+python-dotenv==1.0.1
+pydantic==2.10.4
+pydantic-settings==2.7.1
+
+# Mathematical calculations
+scipy==1.14.1
+sympy==1.13.3
+
+# Logging and monitoring
+loguru==0.7.3
+
+# Date and time handling
+python-dateutil==2.9.0.post0
+
+# Type hints
+typing-extensions==4.12.2
