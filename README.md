@@ -55,3 +55,35 @@ The Valura Financial Planning Agent is designed to assist users in planning thei
 
 1. Access the Streamlit application through your browser at the provided localhost address.
 2. Interact with the Financial Planning Agent by providing your financial details and receive calculations.
+
+## Documentation
+
+Comprehensive documentation is available:
+
+- **[Complete Documentation](DOCUMENTATION.md)** - Full system overview, architecture, and features
+- **[User Guide](USER_GUIDE.md)** - Step-by-step guide for end users
+- **[API Reference](API_REFERENCE.md)** - Technical API documentation for developers
+- **[Deployment Guide](DEPLOYMENT_GUIDE.md)** - Production deployment instructions
+
+### Quick Links
+- [Getting Started](USER_GUIDE.md#getting-started) - New user walkthrough
+- [Technical Implementation](DOCUMENTATION.md#technical-implementation) - Architecture details
+- [Troubleshooting](DOCUMENTATION.md#troubleshooting) - Common issues and solutions
+- [Deployment Options](DEPLOYMENT_GUIDE.md#deployment-options) - Various deployment methods
+
+## Key Features
+
+- **🤖 AI-Powered Conversations**: Natural language interface using Google Gemini
+- **📊 Financial Calculations**: Retirement planning with proven formulas
+- **🎯 Scenario Analysis**: "What-if" calculations for different savings strategies
+- **💡 Detailed Explanations**: Step-by-step breakdown of financial calculations
+- **📱 Modern UI**: Professional Streamlit interface with responsive design
+- **⚡ Real-time Results**: Instant calculations and analysis
+
+## Contributors
+
+- Developed by Agent Mode
+
+## License
+
+This project is licensed under the MIT License.
