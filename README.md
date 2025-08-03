@@ -36,15 +36,9 @@ The Valura Financial Planning Agent is designed to assist users in planning thei
 
 4. **Run the Enhanced Streamlit application**:
    ```bash
-   streamlit run enhanced_financial_chat_app.py
+   streamlit run main.py
    ```
    
-   Alternative applications:
-   ```bash
-   streamlit run app.py                    # Basic version
-   streamlit run financial_chat_app.py     # Chat version
-   python -m streamlit run src/ui/main.py  # Modular version
-   ```
 
 5. **Test the market data integration**:
    ```bash
