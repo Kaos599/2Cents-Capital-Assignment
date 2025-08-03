@@ -6,9 +6,14 @@ The Valura Financial Planning Agent is designed to assist users in planning thei
 
 - **Persona Builder**: Collects user information to build a financial profile.
 - **Financial Calculations**: Runs retirement planning formulas using Python.
-- **Real-Time Data**: Integrates APIs like Tavily and Yahoo Finance for real-time insights.
-- **Streamlit UI**: Provides a modern web interface for interaction.
-- **Comprehensive Testing**: Includes both functionality and API integration tests.
+- **Real-Time Market Data**: 
+  - Current savings account interest rates in India via Tavily API
+  - Live Indian market indices (NIFTY, SENSEX, NIFTY BANK, NIFTY IT)
+  - Latest financial news and market insights
+  - Real-time stock data via Yahoo Finance (yfinance)
+- **AI-Powered Chat**: Google Gemini integration for intelligent financial advice
+- **Streamlit UI**: Provides a modern web interface with live market data sidebar
+- **Comprehensive Testing**: Includes both functionality and API integration tests
 
 ## Setup and Installation
 
@@ -29,14 +34,21 @@ The Valura Financial Planning Agent is designed to assist users in planning thei
    TAVILY_API_KEY=your_tavily_api_key_here
    ```
 
-4. **Run the Streamlit application**:
+4. **Run the Enhanced Streamlit application**:
    ```bash
-   streamlit run app.py
+   streamlit run enhanced_financial_chat_app.py
    ```
    
-   Alternative (if you want to run the modular version):
+   Alternative applications:
    ```bash
-   python -m streamlit run src/ui/main.py
+   streamlit run app.py                    # Basic version
+   streamlit run financial_chat_app.py     # Chat version
+   python -m streamlit run src/ui/main.py  # Modular version
+   ```
+
+5. **Test the market data integration**:
+   ```bash
+   python test_market_integration.py
    ```
 
 ## Running Tests
@@ -53,8 +65,46 @@ The Valura Financial Planning Agent is designed to assist users in planning thei
 
 ## Usage
 
-1. Access the Streamlit application through your browser at the provided localhost address.
-2. Interact with the Financial Planning Agent by providing your financial details and receive calculations.
+### Enhanced Financial Planning Agent
+
+1. **Launch the Enhanced Application**:
+   ```bash
+   streamlit run enhanced_financial_chat_app.py
+   ```
+
+2. **Access Real-Time Market Data**:
+   - View live Indian market indices in the sidebar
+   - Get current savings account interest rates
+   - Access latest financial news and insights
+
+3. **Ask Market-Related Questions**:
+   - "What are the current savings rates in India?"
+   - "Show me today's market performance"
+   - "What's the latest financial news?"
+   - "How do current rates affect my retirement planning?"
+
+4. **Interactive Financial Planning**:
+   - Build your financial profile through guided conversation
+   - Get personalized retirement calculations
+   - Explore different savings scenarios
+   - Receive AI-powered financial advice with current market context
+
+### Market Data Features
+
+- **📊 Live Data Sources**:
+  - Tavily API for real-time search and current rates
+  - Yahoo Finance (yfinance) for market data and stock prices
+  - Google Gemini for intelligent financial advice
+
+- **🇮🇳 Indian Market Coverage**:
+  - NIFTY 50, BSE SENSEX, NIFTY BANK, NIFTY IT indices
+  - Major Indian bank savings account rates
+  - RBI policy updates and financial news
+
+- **💡 Smart Integration**:
+  - Market data automatically incorporated into financial advice
+  - Current rates used for realistic return assumptions
+  - Real-time context for investment recommendations
 
 ## Documentation
 
@@ -67,11 +117,15 @@ Comprehensive documentation is available:
 ## Key Features
 
 - **🤖 AI-Powered Conversations**: Natural language interface using Google Gemini
-- **🧠 Enhanced Memory**: LangGraph-powered memory system that remembers conversations
-- **📊 Financial Calculations**: Retirement planning with proven formulas
+- **📊 Real-Time Market Data**: Live savings rates, market indices, and financial news
+- **🇮🇳 Indian Market Focus**: NIFTY, SENSEX, and major Indian bank rates
+- **💰 Current Interest Rates**: Real-time savings account rates from major Indian banks
+- **� Livae Market Tracking**: Current prices and performance of major indices
+- **� Financ ial News Integration**: Latest market news and investment insights
+- **🧮 Financial Calculations**: Retirement planning with proven formulas
 - **🎯 Scenario Analysis**: "What-if" calculations for different savings strategies
 - **💡 Detailed Explanations**: Step-by-step breakdown of financial calculations
-- **📱 Modern UI**: Professional Streamlit interface with responsive design
-- **⚡ Real-time Results**: Instant calculations and analysis
+- **📱 Modern UI**: Professional Streamlit interface with live market data sidebar
+- **⚡ Real-time Results**: Instant calculations and analysis with current market context
 - **🔄 Persistent State**: Conversations and calculations are remembered across interactions
 
