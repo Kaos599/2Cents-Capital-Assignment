@@ -2,214 +2,89 @@
 
 ## Overview
 
-The Valura Financial Planning Agent is built as a conversational AI system that combines persona building, financial calculations, and real-time market data integration. This document outlines key architectural decisions and trade-offs made during development.
+The Valura Financial Planning Agent combines **LangChain**, **LangGraph**, and **Google Gemini 2.5 Flash** to create an intelligent conversational system for retirement planning with real-time market data integration.
 
 ## Core Architecture Decisions
 
-### 1. LangChain + Gemini 2.5 Flash Integration
+### 1. LangChain + LangGraph + Gemini 2.5 Flash Integration
 
-**Decision**: Used Google's Gemini 2.5 Flash via LangChain's `ChatGoogleGenerativeAI` wrapper rather than direct API calls.
+**Decision**: Used Google's Gemini 2.5 Flash via LangChain's `ChatGoogleGenerativeAI` wrapper with LangGraph for sophisticated state management.
 
 **Rationale**: 
-- LangChain provides standardized interfaces for LLM interactions
-- Gemini 2.5 Flash offers excellent performance-to-cost ratio for conversational AI
-- Built-in conversation memory and context management
-- Easy model switching if needed
+• LangChain provides standardized LLM interfaces with built-in conversation memory
+• LangGraph enables complex conversation flows with persistent state management across phases
+• Gemini 2.5 Flash offers excellent performance-to-cost ratio for conversational AI
+• Easy model switching and enhanced memory capabilities
 
-**Trade-offs**: 
-- Additional dependency layer vs direct API calls
-- LangChain abstraction may limit access to model-specific features
-- Slightly higher latency than direct integration
+**Trade-offs**: Additional dependency layers vs. direct API calls, but gained standardization and sophisticated memory management.
 
-### 2. Streamlit Session State for Memory Management
+### 2. Hybrid Memory Management Strategy
 
-**Decision**: Implemented conversation memory using Streamlit's session state rather than LangGraph's more sophisticated memory systems.
+**Decision**: Combined Streamlit session state for UI persistence with LangGraph's state management for conversation flow.
 
-**Rationale**:
-- Streamlit session state provides persistent storage across user interactions
-- Simpler implementation for MVP requirements
-- Direct integration with UI components
-- No additional database or storage requirements
+**Implementation**: Three-phase state machine (`persona_building` → `profile_complete` → `interactive`) managed by LangGraph, with UI state handled by Streamlit.
 
-**Trade-offs**:
-- Memory doesn't persist across browser sessions
-- Limited to single-user sessions
-- Less sophisticated than LangGraph's graph-based memory
-- Potential memory leaks with long conversations
+**Benefits**: 
+• Persistent conversation context across user interactions
+• Structured data collection with smooth phase transitions
+• LangGraph's graph-based memory for complex conversation flows
+• Direct UI integration without additional database requirements
 
-### 3. Modular Tool Architecture
+### 3. Multi-API Integration with Graceful Fallbacks
 
-**Decision**: Created separate tool classes (`MarketDataTool`) with specific responsibilities rather than monolithic functions.
+**APIs Integrated**:
+• **Tavily API**: Real-time search for savings rates and financial news
+• **Yahoo Finance (yfinance)**: Live Indian market indices (NIFTY, SENSEX, NIFTY BANK, NIFTY IT)
+• **Google Gemini**: Conversational AI and intelligent question classification
 
-**Implementation**:
+**Architecture**: Modular `MarketDataTool` class with specific responsibilities, implementing graceful degradation when APIs are unavailable.
+
+### 4. Pure Function Financial Engine
+
+**Decision**: Implemented financial formulas as pure Python functions for mathematical accuracy.
+
+**Formulas Implemented**:
+• Future Value: `FV = PV × (1 + r)^n`
+• Present Value: `PV = FV / (1 + r)^n`
+• Future Value of Annuity: `FV = PMT × [(1 + r)^n – 1] / r`
+• Present Value of Annuity: `PV = PMT × [1 – (1 + r)^(-n)] / r`
+
+**Benefits**: Easy unit testing, predictable outputs, reusable across contexts, mathematical accuracy verification.
+
+## LangGraph Memory Management
+
+**State Structure**: 
 ```python
-class MarketDataTool:
-    def get_current_savings_rates_india()
-    def get_indian_market_indices()
-    def search_financial_news()
+class AgentState(TypedDict):
+    messages: List[BaseMessage]
+    user_profile: Dict[str, Any]
+    calculations: Dict[str, Any]
+    current_step: str
+    conversation_history: List[Dict[str, str]]
 ```
 
-**Rationale**:
-- Clear separation of concerns
-- Easy testing and mocking
-- Extensible for additional data sources
-- Follows single responsibility principle
+**Conversation Flow**: LangGraph manages transitions between persona building, calculation execution, and interactive Q&A phases, maintaining context and enabling complex conversation patterns.
 
-### 4. Multi-API Integration Strategy
+## Key Trade-offs
 
-**Decision**: Integrated multiple external APIs (Tavily for search, Yahoo Finance for market data) with graceful fallbacks.
-
-**APIs Used**:
-- **Tavily API**: Real-time search for savings rates and financial news
-- **Yahoo Finance (yfinance)**: Live market data for Indian indices
-- **Google Gemini**: Conversational AI and question classification
-
-**Trade-offs**:
-- Increased complexity and potential failure points
-- API rate limits and costs
-- Network dependency for core features
-- Enhanced user experience with real-time data
-
-## Persona Building Architecture
-
-### Conversation Phase Management
-
-**Decision**: Implemented a state machine approach with three phases:
-1. `persona_building` - Guided question flow
-2. `profile_complete` - Initial calculation presentation  
-3. `interactive` - Open-ended Q&A
-
-**Implementation**:
-```python
-if 'conversation_phase' not in st.session_state:
-    st.session_state.conversation_phase = "persona_building"
-```
-
-**Benefits**:
-- Clear user journey progression
-- Contextual AI responses based on phase
-- Structured data collection
-- Smooth transition between modes
-
-### Question Classification System
-
-**Decision**: Used Gemini AI to classify user questions into categories (PERSONA, CALCULATION, SCENARIO, EXPLANATION, ADVICE).
-
-**Rationale**:
-- Dynamic response routing based on intent
-- Natural language understanding
-- Flexible handling of user inputs
-- Reduces rigid conversation flows
-
-## Financial Calculation Engine
-
-### Pure Function Design
-
-**Decision**: Implemented financial formulas as pure Python functions in separate modules.
-
-**Example**:
-```python
-def calculate_retirement_timeline(current_age, retirement_age, monthly_savings, expected_return, current_savings=0):
-    # Pure function with no side effects
-    return calculation_results
-```
-
-**Benefits**:
-- Easy unit testing
-- Predictable outputs
-- Reusable across different contexts
-- Mathematical accuracy verification
-
-### Real-time Market Data Integration
-
-**Decision**: Integrated live market data into financial advice rather than using static assumptions.
-
-**Implementation**:
-- Current Indian savings account rates via Tavily search
-- Live market indices (NIFTY, SENSEX) via Yahoo Finance
-- Real-time context for investment recommendations
-
-**Trade-offs**:
-- API dependencies and potential failures
-- Increased complexity
-- More accurate and relevant advice
-- Better user engagement
-
-## UI/UX Architecture Decisions
-
-### Streamlit Framework Choice
-
-**Decision**: Used Streamlit over React or plain HTML for the frontend.
-
-**Rationale**:
-- Rapid prototyping and development
-- Python-native (no context switching)
-- Built-in state management
-- Easy deployment and sharing
-
-**Trade-offs**:
-- Limited customization compared to React
-- Python-only development team requirement
-- Less control over UI behavior
-- Excellent for MVP and data applications
-
-### Sidebar Information Display
-
-**Decision**: Used Streamlit sidebar for profile display and market data rather than inline cards.
-
-**Benefits**:
-- Persistent information visibility
-- Clean main chat interface
-- Easy access to user profile
-- Real-time market data always visible
-
-## Error Handling and Resilience
-
-### Graceful API Degradation
-
-**Decision**: Implemented fallback mechanisms when external APIs fail.
-
-**Implementation**:
-```python
-if not self.tavily_client:
-    return {
-        "error": "Tavily API not available",
-        "message": "Please configure TAVILY_API_KEY to get real-time data"
-    }
-```
-
-**Benefits**:
-- Application continues functioning with reduced features
-- Clear user communication about limitations
-- Prevents complete system failures
+• **Streamlit vs. React**: Chose Streamlit for rapid Python-native development over React's customization capabilities
+• **Session State vs. Database**: Prioritized simplicity for MVP over persistent cross-session storage
+• **API Dependencies vs. Static Data**: Enhanced user experience with real-time market data despite increased complexity
+• **LangGraph Complexity vs. Simple State**: Chose sophisticated memory management for better conversation flow
 
 ## Scalability Considerations
 
-### Current Limitations
-- Single-user sessions only
-- Memory doesn't persist across browser sessions
-- No user authentication or data persistence
-- Limited to Streamlit's concurrent user capacity
+**Current Limitations**: Single-user sessions, no persistent storage, limited concurrent users
 
-### Future Architecture Path
-- Database integration for user profiles
-- Multi-tenant architecture
-- Microservices for different components
-- Enhanced memory systems with LangGraph
-- WebSocket connections for real-time updates
+**Future Architecture**: Database integration, multi-tenant architecture, microservices separation, enhanced LangGraph workflows, WebSocket real-time updates
 
-## Security and Privacy
+## Security & Privacy
 
-### API Key Management
-- Environment variable configuration
-- No hardcoded credentials
-- Graceful handling of missing keys
-
-### Data Privacy
-- No persistent storage of user financial data
-- Session-based memory only
-- No external data transmission beyond API calls
+• Environment variable API key management
+• No persistent storage of financial data
+• Session-based memory only
+• Graceful API failure handling
 
 ## Conclusion
 
-The architecture prioritizes rapid development and user experience while maintaining code quality and extensibility. The modular design allows for easy enhancement and scaling as requirements evolve. Key trade-offs favor simplicity and functionality over complex enterprise patterns, appropriate for an MVP financial planning agent.
+The architecture balances rapid development with sophisticated AI capabilities through LangChain/LangGraph integration. The modular design enables easy enhancement while LangGraph provides the memory management foundation for complex conversational flows. Trade-offs favor functionality and user experience appropriate for an MVP financial planning agent.
