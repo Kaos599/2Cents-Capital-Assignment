@@ -106,6 +106,7 @@ Comprehensive documentation is available:
 
 - **[Complete Documentation](docs/DOCUMENTATION.md)** - Full system overview, architecture, and features
 - **[User Guide](docs/USER_GUIDE.md)** - Step-by-step guide for end users
+- **[Design Architechure](docs\DESIGN_ARCHITECTURE.md)** - Step-by-step guide for end user
 
 
 ## Key Features
